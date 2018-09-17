@@ -1,21 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
+import BookList from './comps/BookList';
 
 class App extends Component {
 
-  renderBooks(books) {
-    return (<div className="books">
-      {
-        books.map(book => {
-          return (
-            <div className="book">
-              <h2 className="title">{book.name}</h2>
-            </div>
-          )
-        })
-      }
-    </div>)
-  }
 
   render() {
     const books = [
@@ -25,7 +13,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Bookish</h1>
-        {this.renderBooks(books)}
+        <BookList books={books}/>
       </div>
     );
   }
