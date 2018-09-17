@@ -5,7 +5,7 @@ function BookList({books}) {
     {
       books.map(book => {
         return (
-          <div className="book">
+          <div className="book" key={book.name}>
             <h2 className="title">{book.name}</h2>
           </div>
         )
