@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import axios from 'axios';
+import BookListPage from "./pages/BookListPage";
 
 const appUrlBase = 'http://localhost:3000';
 
@@ -30,20 +31,19 @@ describe('Bookish', () => {
 
   test('Heading', async () => {
     await page.goto(`${appUrlBase}/`);
-    await page.waitForSelector('h1');
-    const result = await page.evaluate(() => {
-      return document.querySelector('h1').innerText;
-    });
 
-    expect(result).toEqual('Bookish');
+    const listPage = new BookListPage(page);
+    const heading = await listPage.getHeading();
+
+    expect(heading).toEqual('Bookish');
   });
 
   test('Book List', async () => {
     await page.goto(`${appUrlBase}/`);
-    await page.waitForSelector('.books');
-    const books = await page.evaluate(() => {
-      return [...document.querySelectorAll('.books .title')].map(el => el.innerText);
-    });
+
+    const listPage = new BookListPage(page);
+    const books = await listPage.getBooks();
+
     expect(books.length).toBe(2);
     expect(books[0]).toEqual('Refactoring');
     expect(books[1]).toEqual('Domain-driven design');
@@ -51,11 +51,9 @@ describe('Bookish', () => {
 
   test('Goto book detail', async () => {
     await page.goto(`${appUrlBase}/`);
-    await page.waitForSelector('a.view-detail');
 
-    const links = await page.evaluate(() => {
-      return [...document.querySelectorAll('a.view-detail')].map(el => el.getAttribute('href'));
-    });
+    const listPage = new BookListPage(page);
+    const links = await listPage.getLinks();
 
     await Promise.all([
       page.waitForNavigation({waitUntil: 'networkidle2'}),
@@ -65,11 +63,8 @@ describe('Bookish', () => {
 
     expect(url).toEqual(`${appUrlBase}/books/1`);
 
-    await page.waitForSelector('.description');
-    const result = await page.evaluate(() => {
-      return document.querySelector('.description').innerText;
-    });
-    expect(result).toEqual('Refactoring');
+    const description = await listPage.getDescription();
+    expect(description).toEqual('Refactoring');
   });
 
   test('Show books which name contains keywords', async () => {
@@ -79,10 +74,8 @@ describe('Bookish', () => {
 
     await page.screenshot({path: 'search-for-design.png'});
 
-    await page.waitForSelector('.book .title');
-    const books = await page.evaluate(() => {
-      return [...document.querySelectorAll('.book .title')].map(el => el.innerText);
-    });
+    const listPage = new BookListPage(page);
+    const books = await listPage.getBooks();
 
     expect(books.length).toEqual(1);
     expect(books[0]).toEqual('Domain-driven design');
