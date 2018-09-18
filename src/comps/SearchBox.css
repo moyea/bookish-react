@@ -1,0 +1,7 @@
+.search {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 2px 4px;
+  height: 32px;
+}
