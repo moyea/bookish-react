@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from "enzyme";
-import BookList from "./comps/BookList";
+import BookList from "./BookList";
 
 describe('BookList', () => {
   it('Show a loading bar when loading', () => {

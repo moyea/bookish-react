@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import BookList from "./BookList";
+import BookList from "../comps/BookList";
 
 class BookListContainer extends Component {
   state = {

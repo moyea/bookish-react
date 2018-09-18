@@ -16,8 +16,8 @@ describe('Bookish', () => {
 
   beforeEach(() => {
     const books = [
-      {id: 1, name: "Refactoring"},
-      {id: 2, name: "Domain-driven design"}
+      {id: 1, name: "Refactoring", description: 'Refactoring'},
+      {id: 2, name: "Domain-driven design", description: 'Domain-driven design'}
     ];
     return books.map(item =>
       axios.post('http://localhost:8080/books', item, {headers: {'Content-Type': 'application/json'}})
@@ -64,6 +64,12 @@ describe('Bookish', () => {
     const url = await page.evaluate('location.href');
 
     expect(url).toEqual(`${appUrlBase}/books/1`);
+
+    await page.waitForSelector('.description');
+    const result = await page.evaluate(() => {
+      return document.querySelector('.description').innerText;
+    });
+    expect(result).toEqual('Refactoring');
   });
 });
 
