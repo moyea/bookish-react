@@ -49,6 +49,22 @@ describe('Bookish', () => {
     expect(books[1]).toEqual('Domain-driven design');
   });
 
+  test('Goto book detail', async () => {
+    await page.goto(`${appUrlBase}/`);
+    await page.waitForSelector('a.view-detail');
+
+    const links = await page.evaluate(() => {
+      return [...document.querySelectorAll('a.view-detail')].map(el => el.getAttribute('href'));
+    });
+
+    await Promise.all([
+      page.waitForNavigation({waitUntil: 'networkidle2'}),
+      page.goto(`${appUrlBase}${links[0]}`)
+    ]);
+    const url = await page.evaluate('location.href');
+
+    expect(url).toEqual(`${appUrlBase}/books/1`);
+  });
 });
 
 afterAll(() => {
