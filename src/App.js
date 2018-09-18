@@ -6,7 +6,7 @@ import BookDetailContainer from "./containers/BookDetailContainer";
 
 function App() {
   return (
-    <div className="App">
+    <div className="container">
       <h1>Bookish</h1>
       <main>
         <Route exact path="/" component={BookListContainer}/>
