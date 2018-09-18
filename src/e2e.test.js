@@ -48,6 +48,7 @@ describe('Bookish', () => {
     expect(books[0]).toEqual('Refactoring');
     expect(books[1]).toEqual('Domain-driven design');
   });
+
 });
 
 afterAll(() => {

@@ -26,15 +26,7 @@ class BookListContainer extends Component {
   }
 
   render() {
-    const {loading, error, books} = this.state;
-
-    if (loading) {
-      return <div className="loading"/>
-    }
-    if (error) {
-      return <div className="error"/>
-    }
-    return <BookList books={books}/>
+    return <BookList {...this.state}/>
   }
 }
 
