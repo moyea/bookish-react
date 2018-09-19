@@ -1,7 +1,8 @@
 import * as types from './types';
 
 const initState = {
-  term: ''
+  term: '',
+  books: []
 };
 
 const reducer = (state = initState, action) => {

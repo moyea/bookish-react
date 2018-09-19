@@ -1,8 +1,8 @@
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
 import chunk from 'redux-thunk';
-import {setSearchTerm, fetchBooks} from '../store/actions';
-import * as types from '../store/types';
+import {setSearchTerm, fetchBooks} from './actions';
+import * as types from './types';
 
 const middlewares = [chunk];
 const mockStore = configureMockStore(middlewares);

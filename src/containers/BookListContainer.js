@@ -1,55 +1,41 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import BookList from "../comps/BookList";
-import SearchBox from "../comps/SearchBox";
+import BookList from '../comps/BookList';
+import SearchBox from '../comps/SearchBox';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {setSearchTerm, fetchBooks} from '../store/actions';
 
 class BookListContainer extends Component {
-  state = {
-    books: [],
-    loading: true,
-    error: null,
-    term: ''
-  };
 
   componentDidMount() {
-    this.fetchBooks();
-  }
-
-  updateBooks(res) {
-    this.setState({
-      books: res.data,
-      loading: false
-    });
-  }
-
-  updateError(err) {
-    this.setState({
-      loading: false,
-      error: err
-    });
+    this.props.fetchBooks();
   }
 
   filterBook(e) {
-    this.setState({
-      term: e.target.value
-    }, this.fetchBooks);
-  }
-
-  fetchBooks() {
-    const {term} = this.state;
-    axios.get(`http://localhost:8080/books?q=${term}`)
-      .then(res => this.updateBooks(res))
-      .catch(err => this.updateError(err));
+    this.props.setSearchTerm(e.target.value);
+    this.props.fetchBooks();
   }
 
   render() {
     return (
       <div>
-        <SearchBox onChange={(e)=>this.filterBook(e)} term={this.state.term}/>
-        <BookList {...this.state}/>
+        <SearchBox onChange={(e) => this.filterBook(e)} term={this.props.term}/>
+        <BookList {...this.props}/>
       </div>
     )
   }
 }
 
-export default BookListContainer;
+const mapStateToProps = state => ({
+  loading: state.list.loading,
+  books: state.list.books,
+  error: state.list.error,
+  term: state.list.term
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  setSearchTerm,
+  fetchBooks
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookListContainer);
