@@ -1,7 +1,8 @@
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
 import chunk from 'redux-thunk';
-import {setSearchTerm, fetchBooks} from "./BookList.service";
+import {setSearchTerm, fetchBooks} from '../store/actions';
+import * as types from '../store/types';
 
 const middlewares = [chunk];
 const mockStore = configureMockStore(middlewares);
@@ -10,7 +11,7 @@ describe('BookListContainer related actions', () => {
   it('Set search keyword', () => {
     const term = '';
     const expected = {
-      type: 'FETCH_BOOKS',
+      type: types.SET_SEARCH_TERM,
       term
     };
     const action = setSearchTerm(term);
@@ -26,13 +27,13 @@ describe('BookListContainer related actions', () => {
     axios.get = jest.fn().mockImplementation(() => Promise.resolve({data: books}));
 
     const expectedActions = [
-      {type: 'FETCH_BOOKS_PENDING'},
-      {type: 'FETCH_BOOKS_SUCCESS', payload: books}
+      {type: types.FETCH_BOOKS_PENDING},
+      {type: types.FETCH_BOOKS_SUCCESS, payload: books}
     ];
 
-    const store = mockStore({books: []});
+    const store = mockStore({list: {books: []}});
 
-    return store.dispatch(fetchBooks('')).then(() => {
+    return store.dispatch(fetchBooks()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -41,13 +42,13 @@ describe('BookListContainer related actions', () => {
     axios.get = jest.fn().mockImplementation(() => Promise.reject({message: 'Something went wrong'}));
 
     const expectedActions = [
-      {type: 'FETCH_BOOKS_PENDING'},
-      {type: 'FETCH_BOOKS_FAILED', payload: {message: 'Something went wrong'}}
+      {type: types.FETCH_BOOKS_PENDING},
+      {type: types.FETCH_BOOKS_FAILED, payload: {message: 'Something went wrong'}}
     ];
 
-    const store = mockStore({books: []});
+    const store = mockStore({list: {books: []}});
 
-    return store.dispatch(fetchBooks('')).then(() => {
+    return store.dispatch(fetchBooks()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -58,9 +59,9 @@ describe('BookListContainer related actions', () => {
       {id: 2, name: 'Domain-driven design'}
     ];
     axios.get = jest.fn().mockImplementation(() => Promise.resolve({data: books}));
-    const store = mockStore({books: [], term: 'domain'});
+    const store = mockStore({list: {books: [], term: 'domain'}});
 
-    return store.dispatch(fetchBooks('')).then(() => {
+    return store.dispatch(fetchBooks()).then(() => {
       expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/books?q=domain');
     });
   });
