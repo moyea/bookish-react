@@ -2,7 +2,9 @@ import * as types from './types';
 
 const initState = {
   term: '',
-  books: []
+  books: [],
+  error: '',
+  current: {}
 };
 
 const reducer = (state = initState, action) => {
@@ -26,7 +28,13 @@ const reducer = (state = initState, action) => {
     case types.FETCH_BOOKS_FAILED:
       return {
         ...state,
+        error: action.err,
         loading: false
+      };
+    case types.FETCH_BOOK_SUCCESS:
+      return {
+        ...state,
+        current: action.payload
       };
     default:
       return state;

@@ -28,4 +28,12 @@ describe('Store', () => {
         expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/books?q=domain');
       })
   });
+
+  it('Fetch a book from remote', () => {
+    axios.get = jest.fn().mockImplementation(() => Promise.resolve({data: books[0]}));
+    return store.dispatch(actions.fetchABook(1)).then(() => {
+      const state = store.getState();
+      expect(state.list.current).toEqual(books[0]);
+    });
+  })
 });

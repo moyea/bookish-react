@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {setSearchTerm, fetchBooks} from '../store/actions';
 
-class BookListContainer extends Component {
+export class BookListContainer extends Component {
 
   componentDidMount() {
     this.props.fetchBooks();
