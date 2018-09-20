@@ -1,0 +1,26 @@
+input[name="name"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 2px 4px;
+  height: 32px;
+  border: 1px solid #ccc;
+}
+
+textarea[name="content"] {
+  margin-top: 10px;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 2px 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 5px;
+  padding: .5em 2em;
+  height: 32px;
+  border: 0;
+  background-color: limegreen;
+  color: #fff;
+}

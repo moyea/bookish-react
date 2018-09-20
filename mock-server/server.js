@@ -11,17 +11,15 @@ const relations = {
 function buildRewrite(relations) {
   return _.reduce(relations, (acc, embed, resources) => {
     acc[`${resources}/:id`] = `${resources}/:id?_embed=${embed}`;
+    console.log(acc);
     return acc;
   }, {});
 }
-
-server.use(jsonServer.rewriter(buildRewrite(relations)));
 
 server.use(jsonServer.bodyParser);
 
 server.use((req, res, next) => {
   const parts = req.path.split('/');
-
   if (!_.isNaN(_.toNumber(_.last(parts)))) {
     req.entity = _.nth(parts, -2);
   } else {
@@ -54,6 +52,7 @@ server.use((req, res, next) => {
 
 server.use(middlewares);
 server.use(router);
+server.use(jsonServer.rewriter(buildRewrite(relations)));
 
 server.listen(8080, () => {
   console.log('JSON Server is Running at: 8080');

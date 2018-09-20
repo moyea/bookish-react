@@ -1,4 +1,41 @@
 {
-  "books": [],
-  "reviews": []
+  "books": [
+    {
+      "id": 1,
+      "name": "Refactoring",
+      "description": "Refactoring"
+    }
+  ],
+  "reviews": [
+    {
+      "name": "Scotty",
+      "content": "",
+      "bookId": 1,
+      "id": 1
+    },
+    {
+      "name": "Scotty",
+      "content": "",
+      "bookId": 1,
+      "id": 2
+    },
+    {
+      "name": "Scotty",
+      "content": "123",
+      "bookId": 1,
+      "id": 3
+    },
+    {
+      "name": "Scotty",
+      "content": "123",
+      "bookId": 1,
+      "id": 4
+    },
+    {
+      "name": "1",
+      "content": "123",
+      "bookId": 1,
+      "id": 5
+    }
+  ]
 }

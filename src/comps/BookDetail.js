@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {ReviewList} from './ReviewList';
+import './BookDetail.css'
 
 class BookDetail extends Component {
 
@@ -26,18 +27,30 @@ class BookDetail extends Component {
     });
   };
 
+  renderReviewList = () => {
+    const {book} = this.props;
+    if (book.reviews) {
+      return <ReviewList reviews={book.reviews}/>;
+    }
+  };
+
+  renderReviewForm = () => {
+    return (<form>
+      <input type="text" name="name" value={this.state.name} onChange={this.updateName} placeholder="Your name"/>
+      <textarea name="content" cols="30" rows="10" value={this.state.content} onChange={this.updateContent}
+                placeholder="Write your view"/>
+      <button name="submit" onClick={this.saveReview}>Submit</button>
+    </form>);
+  };
+
   render() {
     const {book} = this.props;
     return (
       <div className="detail">
         <h2 className="name">{book.name}</h2>
         <div className="description">{book.description}</div>
-        <form>
-          <input type="text" name="name" value={this.state.name} onChange={this.updateName}/>
-          <textarea name="content" cols="30" rows="10" value={this.state.content} onChange={this.updateContent}/>
-          <button name="submit" onClick={this.saveReview}>Submit</button>
-        </form>
-        {book.reviews && <ReviewList reviews={book.reviews}/>}
+        {this.renderReviewForm()}
+        {this.renderReviewList()}
       </div>
     );
   }

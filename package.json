@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "date-fns": "^1.29.0",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
     "qs": "^6.5.2",
