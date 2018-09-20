@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 import axios from 'axios';
-import BookListPage from "./pages/BookListPage";
+import BookListPage from './pages/BookListPage';
 
 const appUrlBase = 'http://localhost:3000';
 
@@ -15,18 +15,22 @@ beforeAll(async () => {
 
 describe('Bookish', () => {
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const books = [
-      {id: 1, name: "Refactoring", description: 'Refactoring'},
-      {id: 2, name: "Domain-driven design", description: 'Domain-driven design'}
+      {id: 1, name: 'Refactoring', description: 'Refactoring'},
+      {id: 2, name: 'Domain-driven design', description: 'Domain-driven design'}
     ];
-    return books.map(item =>
-      axios.post('http://localhost:8080/books', item, {headers: {'Content-Type': 'application/json'}})
-    )
+    const promises = [];
+    books.map(item =>
+      promises.push(
+        axios.post('http://localhost:8080/books', item, {headers: {'Content-Type': 'application/json'}})
+      )
+    );
+    await Promise.all(promises);
   });
 
-  afterEach(() => {
-    return axios.delete('http://localhost:8080/books?_cleanup=true').catch(err => err);
+  afterEach(async () => {
+    await axios.delete('http://localhost:8080/books?_cleanup=true').catch(err => err);
   });
 
   test('Heading', async () => {
@@ -80,6 +84,41 @@ describe('Bookish', () => {
     expect(books.length).toEqual(1);
     expect(books[0]).toEqual('Domain-driven design');
   });
+
+  test('Write an review for a book', async () => {
+    await page.goto(`${appUrlBase}/`);
+    await page.waitForSelector('a.view-detail');
+
+    const listPage = new BookListPage(page);
+    const links = await listPage.getLinks();
+
+    await Promise.all([
+      page.waitForNavigation({waitUntil: 'networkidle2'}),
+      page.goto(`${appUrlBase}${links[0]}`)
+    ]);
+
+    const url = await page.evaluate('location.href');
+    expect(url).toEqual(`${appUrlBase}/books/1`);
+
+    await page.waitForSelector('input[name="name"]');
+    page.type('input[name="name"]', 'Jerry');
+    await page.waitFor(100);
+    await page.waitForSelector('textarea[name="content"]');
+    page.type('textarea[name="content"]', 'Excellent works');
+
+    await page.waitForSelector('button[name="submit"]');
+    await page.screenshot({path: 'submit-review.png'});
+    page.click('button[name="submit"]');
+
+    await page.waitForSelector('.review');
+
+    const reviews = await page.evaluate(() => {
+      return [...document.querySelectorAll('.review')].map(el => el.innerText);
+    });
+
+    expect(reviews.length).toEqual(1);
+    expect(reviews[0]).toEqual('Excellent works');
+  }, 100000);
 });
 
 afterAll(() => {

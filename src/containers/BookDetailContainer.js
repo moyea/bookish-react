@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import BookDetail from '../comps/BookDetail';
 import {connect} from 'react-redux';
-import {fetchABook} from '../store/actions';
+import {fetchABook, saveReview} from '../store/actions';
 import {bindActionCreators} from 'redux';
 
 export class BookDetailContainer extends Component {
@@ -13,16 +12,17 @@ export class BookDetailContainer extends Component {
   }
 
   render() {
-    return <BookDetail {...this.state}/>;
+    return <BookDetail {...this.props}/>;
   }
 }
 
 const mapStateToProps = (state) => ({
-  book: state.list.book
+  book: state.list.current
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchABook
+  fetchABook,
+  saveReview
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookDetailContainer);

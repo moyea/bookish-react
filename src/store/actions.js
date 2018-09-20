@@ -32,3 +32,21 @@ export const fetchABook = (id) => {
 export const setSearchTerm = term => {
   return {type: types.SET_SEARCH_TERM, term};
 };
+
+export const saveReview = (id, review) => {
+  const config = {
+    headers: {'Content-Type': 'application/json'}
+  };
+  return (dispatch) => {
+    const data = {...review, bookId: id};
+    dispatch({type: types.SAVE_BOOK_REVIEW_PENDING});
+    return axios.post(`http://localhost:8080/reviews`, data, config)
+      .then(res => {
+        dispatch({type: types.SAVE_BOOK_REVIEW_SUCCESS, payload: res.data});
+        dispatch(fetchABook(id));
+      })
+      .catch(err => {
+        dispatch({type: types.SAVE_BOOK_REVIEW_FAILED, error: err});
+      });
+  }
+};
