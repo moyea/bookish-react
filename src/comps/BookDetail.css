@@ -24,3 +24,8 @@ button {
   background-color: limegreen;
   color: #fff;
 }
+
+.description {
+  color: #999;
+  margin-bottom: 30px;
+}

@@ -4,38 +4,54 @@
       "id": 1,
       "name": "Refactoring",
       "description": "Refactoring"
+    },
+    {
+      "id": 2,
+      "name": "Domain-driven design",
+      "description": "Domain-driven design"
     }
   ],
   "reviews": [
     {
-      "name": "Scotty",
-      "content": "",
+      "name": "Jerry",
+      "content": "Excellent works",
       "bookId": 1,
       "id": 1
     },
     {
-      "name": "Scotty",
-      "content": "",
+      "name": "Jerry",
+      "content": "Excellent works",
       "bookId": 1,
       "id": 2
     },
     {
-      "name": "Scotty",
-      "content": "123",
+      "name": "muyea",
+      "content": "234",
       "bookId": 1,
       "id": 3
     },
     {
-      "name": "Scotty",
-      "content": "123",
+      "name": "Jerry",
+      "content": "Excellent works",
       "bookId": 1,
       "id": 4
     },
     {
-      "name": "1",
-      "content": "123",
+      "name": "Jerry",
+      "content": "Excellent works",
       "bookId": 1,
       "id": 5
+    },
+    {
+      "name": "Jerry",
+      "content": "Excellent works",
+      "id": 6
+    },
+    {
+      "name": "Jerry",
+      "content": "Excellent works",
+      "bookId": 1,
+      "id": 7
     }
   ]
 }

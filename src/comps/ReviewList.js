@@ -5,7 +5,7 @@ export const ReviewList = ({reviews}) => {
   return (
     <div className="review-container">
       {
-        reviews.map(review => <Review review={review} key={`${review.name}-${review.timestamp}`}/>)
+        reviews.map(review => <Review review={review} key={`${review.name}`}/>)
       }
     </div>
   );
