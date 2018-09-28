@@ -52,7 +52,7 @@ export const saveReview = (id, review) => {
 };
 
 
-export const updateReview = (id, review) => {
+export const updateReview = (id, review, bookId) => {
   const config = {
     headers: {'Content-Type': 'application/json'}
   };
@@ -61,6 +61,7 @@ export const updateReview = (id, review) => {
     return axios.put(`http://localhost:8080/reviews/${id}`, review, config)
       .then(res => {
         dispatch({type: types.SAVE_BOOK_REVIEW_SUCCESS, payload: res.data});
+        dispatch(fetchABook(bookId));
       })
       .catch(err => {
         dispatch({type: types.SAVE_BOOK_REVIEW_FAILED, error: err});

@@ -28,11 +28,5 @@ export default class BookListPage {
     return links;
   }
 
-  async getDescription() {
-    await this.page.waitForSelector('.description');
-    const result = await this.page.evaluate(() => {
-      return document.querySelector('.description').innerText;
-    });
-    return result;
-  }
+
 }

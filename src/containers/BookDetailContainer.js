@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import BookDetail from '../comps/BookDetail';
 import {connect} from 'react-redux';
-import {fetchABook, saveReview, updateReview} from '../store/actions';
+import {fetchABook, saveReview} from '../store/actions';
 import {bindActionCreators} from 'redux';
 
 export class BookDetailContainer extends Component {

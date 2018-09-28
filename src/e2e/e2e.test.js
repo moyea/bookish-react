@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import BookListPage from './pages/BookListPage';
+import DetailPage from './pages/DetailPage';
 
 const appUrlBase = 'http://localhost:3000';
 
@@ -53,71 +54,34 @@ describe('Bookish', () => {
     expect(books[1]).toEqual('Domain-driven design');
   });
 
-  test('Goto book detail', async () => {
-    await page.goto(`${appUrlBase}/`);
-
-    const listPage = new BookListPage(page);
-    const links = await listPage.getLinks();
-
-    await Promise.all([
-      page.waitForNavigation({waitUntil: 'networkidle2'}),
-      page.goto(`${appUrlBase}${links[0]}`)
-    ]);
-    const url = await page.evaluate('location.href');
-
-    expect(url).toEqual(`${appUrlBase}/books/1`);
-
-    const description = await listPage.getDescription();
-    expect(description).toEqual('Refactoring');
-  });
-
   test('Show books which name contains keywords', async () => {
     await page.goto(`${appUrlBase}/`);
     await page.waitForSelector('input.search');
     page.type('input.search', 'design');
-
     await page.screenshot({path: 'search-for-design.png'});
-
     const listPage = new BookListPage(page);
     const books = await listPage.getBooks();
-
     expect(books.length).toEqual(1);
     expect(books[0]).toEqual('Domain-driven design');
   });
 
+  test('Goto book detail', async () => {
+    const detailPage = new DetailPage(browser, 1);
+    await detailPage.initialize();
+    const description = await detailPage.getDescription();
+    expect(description).toEqual('Refactoring');
+  });
+
   test('Write an review for a book', async () => {
-    await page.goto(`${appUrlBase}/`);
-    await page.waitForSelector('a.view-detail');
-
-    const listPage = new BookListPage(page);
-    const links = await listPage.getLinks();
-
-    await Promise.all([
-      page.waitForNavigation({waitUntil: 'networkidle2'}),
-      page.goto(`${appUrlBase}${links[0]}`)
-    ]);
-
-    const url = await page.evaluate('location.href');
-    expect(url).toEqual(`${appUrlBase}/books/1`);
-
-    await page.waitForSelector('input[name="name"]');
-    page.type('input[name="name"]', 'Jerry');
-    await page.waitFor(100);
-    await page.waitForSelector('textarea[name="content"]');
-    page.type('textarea[name="content"]', 'Excellent works');
-
-    await page.waitForSelector('button[name="submit"]');
-    await page.screenshot({path: 'submit-review.png'});
-    page.click('button[name="submit"]');
-
-    await page.waitForSelector('.review');
-
-    const reviews = await page.evaluate(() => {
-      return [...document.querySelectorAll('.review')].map(el => el.innerText);
-    });
-
-    expect(reviews.length).toEqual(1);
-    expect(reviews[0]).toEqual('Excellent works');
+    const detailPage = new DetailPage(browser, 1);
+    await detailPage.initialize();
+    const review = {
+      name: 'Jerry',
+      content: 'Excellent works'
+    };
+    await detailPage.addReview(review);
+    const result = await detailPage.getReview(0);
+    expect(result).toEqual('Excellent works');
   }, 100000);
 });
 

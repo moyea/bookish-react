@@ -23,9 +23,10 @@ export class Review extends Component {
     this.setState({
       editing: false
     });
-    const {id} = this.props.review;
-    this.props.updateReview(id, {
-      content: ''
+    const {review} = this.props;
+    this.props.updateReview(review.id, {
+      ...review,
+      content: this.state.content
     });
   }
 
